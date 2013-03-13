@@ -1,0 +1,32 @@
+#stage {
+    position    :   absolute;
+    top         :   0;
+    bottom      :   0;
+    right       :   0;
+    left        :   0;
+    background  :   #eee;
+    -webkit-transition : -webkit-transform 0.2s ease-out;
+}
+
+#stage.zoom {
+    -webkit-transform : scale(0.2);
+}
+
+.box {
+    position : absolute;
+    width   :   160px;
+    height  :   160px;
+
+    border-radius   :   2px;
+    background : rgba(0,0,0,0.05);
+}
+
+.box .ui-resizable-se {
+    width       :   20px;
+    height      :   20px;
+    background  :   rgba(0,0,0,0.3);
+    position    :   absolute;
+    bottom      :   0;
+    right       :   0;
+}
+
