@@ -1,4 +1,9 @@
 $(function() {
+    /* Constants */
+
+    var fadeMouseInteractiveElementsTime = 2100
+
+    /* The app*/
     var stage = $('#stage')
 
     stage.bind('dblclick', function(ev) {
@@ -9,6 +14,9 @@ $(function() {
 
         if (ev.target.id == 'stage') {
             stage.append(box())
+        } else if ($(ev.target).hasClass('box')) {
+            console.log(ev.target)
+            ev.target.contentEditable = true
         }
     })
 
@@ -24,16 +32,26 @@ $(function() {
         }
     })
 
+    $(window).bind('mousemove', function(ev) {
+        // Fade out the resizers etc after some time
+        if (!$('body').hasClass('mousemoving')) {
+            $('body').addClass('mousemoving')
+            var tmptimer = window.setTimeout(function() {
+                $('body').removeClass('mousemoving')
+            }, fadeMouseInteractiveElementsTime, false)
+        }
+    })
+
     $(window).bind('contextmenu', function(ev) {
         // Create our own :)
-        console.log(ev.target)
-        cmenu(ev)
-        return false
+        //cmenu(ev)
+        //return false
     })
 })
 
 function box() {
     var box = $('<div class="box"></div>')
+    box.css('position','absolute')
     box.draggable(
         {
             grid : [40, 40]
@@ -55,7 +73,6 @@ function cmenu(ev) {
 
     cmenu.css('top',ev.clientY).css('left', ev.clientX)
 
-    console.log(ev)
     var menu = cmenu.find('ol')
     var p1 = $('<li>Create content</li>')
 
