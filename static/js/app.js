@@ -16,7 +16,13 @@ $(function() {
             stage.append(box())
         } else if ($(ev.target).hasClass('box')) {
             console.log(ev.target)
-            ev.target.contentEditable = true
+            var write = document.createElement('span')
+            $(ev.target).append(write)
+            write.contentEditable = true
+            write.focus()
+            $(write).bind('click', function(ev) {
+                ev.preventBubble()
+            })
         }
     })
 
