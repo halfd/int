@@ -77,8 +77,8 @@ function getBoxes() {
 
 function setBoxes(boxes) {
 	$(boxes).each(function(i, boxRep) {
-		var tmpbox = box(boxRep.positionData)
-		tmpbox.html(boxRep.content)
+		var tmpbox = box(boxRep)
+		//tmpbox.html(boxRep.content)
 		tmpbox.find('img').css('opacity','0').bind('load',function() {
 			$(this).css('opacity','1')
 		})
@@ -86,11 +86,17 @@ function setBoxes(boxes) {
 	})
 }
 
-function box(positionData) {
+function box(boxData) {
 	var box = $('<div class="box"></div>')
 	var menu = $('<div class="menu"></div>')
 
 	box.data('bid', Math.floor(Math.random() * 10000))
+    box.find('.ui-resizable-handle, .menu').remove()
+
+    if (boxData != undefined) {
+        var positionData = boxData.positionData
+        box.html(boxData.content)
+    }
 
 	if (positionData != undefined) {
 		box.data('positionData', positionData)
@@ -205,16 +211,18 @@ function addTextNode(target) {
 	$(target).append(write)
 	write.contentEditable = true
 	write.focus()
+    write.setAttribute('data-type','node')
 	write.className = 'textfield'
+    write.onclick=function(ev) { ev.preventDefault(); return false }
 }
 
 function addYoutubeNode(target) {
-	var node = $('<iframe width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+	var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
 	$(target).append(node)
 }
 
 function addTextInputNode(target) {
-	var node = $('<input type="text" id="textInputNode"></input>')
+	var node = $('<input data-type="node" type="text" id="textInputNode"></input>')
 	$(target).append(node)
 }
 
@@ -222,7 +230,7 @@ function addFlickrImageNode(target) {
 	var imageSrc = ''
 	$.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=?', function(data) {
 		imageSrc = data.items[0].media.m
-		var node = $('<img src="' + imageSrc + '" />')
+		var node = $('<img data-type="node" src="' + imageSrc + '" />')
 		node.css('opacity','0')
 		node.bind('load', function() {
 			node.css('opacity','1')
