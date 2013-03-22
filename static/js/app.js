@@ -46,25 +46,65 @@ $(function() {
         //cmenu(ev)
         //return false
     })
+
+	load()
 })
 
-function box() {
+function save() {
+	localStorage.setItem('boxes', JSON.stringify(getBoxes()))
+}
+
+function load() {
+	setBoxes(JSON.parse(localStorage.getItem('boxes')))
+}
+
+function getBoxes() {
+	var boxes = []
+	$('.box').each(function(i, box) {
+		console.log(i)
+		console.log(box)
+		var boxrep = {
+			bid : $(box).data('bid'),
+			positionData : $(box).data('positionData'),
+		}
+		boxes.push(boxrep)
+	})
+
+	return boxes
+}
+
+function setBoxes(boxes) {
+	$(boxes).each(function(i, boxRep) {
+		console.log(boxRep)
+		var tmpbox = box(boxRep.positionData)
+		$('#stage').append(tmpbox)
+	})
+}
+
+function box(positionData) {
 	var box = $('<div class="box"></div>')
 	var menu = $('<div class="menu"></div>')
 
 	box.data('bid', Math.floor(Math.random() * 10000))
-	box.positionData = {
-		x : 0,
-		y : 0,
-		width : 0,
-		height : 0,
+
+	if (positionData != undefined) {
+		box.data('positionData', positionData)
+	} else {
+			box.data('positionData', {
+				x : 0,
+				y : 0,
+				width : 160,
+				height : 160,
+			});
 	}
 
 	box.updatePositionData = function() {
-		box.positionData.x = box.css('left')
-		box.positionData.y = box.css('top')
-		box.positionData.width = box.css('width')
-		box.positionData.height = box.css('height')
+		box.data('positionData').x = box.css('left')
+		box.data('positionData').y = box.css('top')
+		box.data('positionData').width = box.css('width')
+		box.data('positionData').height = box.css('height')
+
+		save()
 	}
 
 	menu.bind('click', function(ev) {
@@ -73,8 +113,15 @@ function box() {
 		ev.preventDefault()
 		return false
 	})
+	box.append(menu)
 
     box.css('position','absolute')
+	
+	box.css('top', box.data('positionData').y)
+	box.css('left', box.data('positionData').x)
+	box.css('width', box.data('positionData').width)
+	box.css('height', box.data('positionData').height)
+
     box.draggable(
         {
             grid : [40, 40],
@@ -89,7 +136,6 @@ function box() {
         }
     )
 
-	box.append(menu)
     return box
 }
 
@@ -130,6 +176,8 @@ function cmenu(ev) {
         cmenu.remove()
     })
 }
+
+/* Node types */
 
 function addTextNode(target) {
 	var write = document.createElement('div')
