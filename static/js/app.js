@@ -79,6 +79,9 @@ function setBoxes(boxes) {
 	$(boxes).each(function(i, boxRep) {
 		var tmpbox = box(boxRep.positionData)
 		tmpbox.html(boxRep.content)
+		tmpbox.find('img').css('opacity','0').bind('load',function() {
+			$(this).css('opacity','1')
+		})
 		$(stage).append(tmpbox)
 	})
 }
@@ -220,6 +223,10 @@ function addFlickrImageNode(target) {
 	$.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=?', function(data) {
 		imageSrc = data.items[0].media.m
 		var node = $('<img src="' + imageSrc + '" />')
+		node.css('opacity','0')
+		node.bind('load', function() {
+			node.css('opacity','1')
+		})
 		$(target).append(node)
 	})
 
