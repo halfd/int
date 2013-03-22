@@ -91,11 +91,11 @@ function box(boxData) {
 	var menu = $('<div class="menu"></div>')
 
 	box.data('bid', Math.floor(Math.random() * 10000))
-    box.find('.ui-resizable-handle, .menu').remove()
 
     if (boxData != undefined) {
         var positionData = boxData.positionData
         box.html(boxData.content)
+        box.find('.ui-resizable-handle, .menu').remove()
     }
 
 	if (positionData != undefined) {

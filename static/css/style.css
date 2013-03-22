@@ -2,6 +2,10 @@ body {
     font-family : "Helvetica", sans-serif;
     font-weight : 100;
     color       :   #525250;
+    background-color    :   000;
+    background-image : url('../images/space.jpg');
+    background-repeat : no-repeat;
+    background-size : cover;
 }
 
 #stage1 {
@@ -10,10 +14,11 @@ body {
     bottom      :   0;
     right       :   0;
     left        :   0;
-    background  :   #eaeae9;
+    background  :   #4ab2a9;
     -webkit-transition : -webkit-transform 0.2s ease-out;
     -moz-transition : -moz-transform 0.2s ease-out;
     z-index : 1;
+    box-shadow  :   0 0 30px 30px rgba(80,160,230,0.5);
 }
 
 #stage2 {
@@ -26,6 +31,7 @@ body {
 	right : 100%;
     -webkit-transition : -webkit-transform 0.2s ease-out;
     -moz-transition : -moz-transform 0.2s ease-out;
+    display     :   none;
 }
 
 #world.zoom #stage2 {
@@ -47,6 +53,10 @@ body {
     padding : 0;
     -webkit-transition : -webkit-transform 0.8s ease-out;
     -moz-transition : -moz-transform 0.8s ease-out;
+}
+
+.box.ui-draggable-dragging {
+    box-shadow  :   0 0 5px rgba(0,0,0,0.2)
 }
 
 .box .menu {
