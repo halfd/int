@@ -4,7 +4,7 @@ body {
     color       :   #393933;
 }
 
-#stage {
+#stage1 {
     position    :   absolute;
     top         :   0;
     bottom      :   0;
@@ -16,7 +16,23 @@ body {
     z-index : 1;
 }
 
-#stage.zoom {
+#stage2 {
+	background : pink;
+    position    :   absolute;
+    top         :   0;
+    bottom      :   0;
+	width : 100%;
+	height : 100%;
+	right : 100%;
+    -webkit-transition : -webkit-transform 0.2s ease-out;
+    -moz-transition : -moz-transform 0.2s ease-out;
+}
+
+#world.zoom #stage2 {
+	left : -25%;
+}
+
+#world.zoom .stage {
     -webkit-transform : scale(0.2);
     -moz-transform : scale(0.2);
 }

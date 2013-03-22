@@ -1,19 +1,22 @@
+var stage = null
+var world = $('#world')
+
 $(function() {
     /* Constants */
 
     var fadeMouseInteractiveElementsTime = 2100
 
     /* The app*/
-    var stage = $('#stage')
+    stage = $('#stage1')
 
-    stage.bind('dblclick', function(ev) {
-        if (stage.hasClass('zoom')) {
-            stage.removeClass('zoom')
+    $(window).bind('dblclick', function(ev) {
+        if (world.hasClass('zoom')) {
+            world.removeClass('zoom')
             return
         }
 
-        if (ev.target.id == 'stage') {
-            stage.append(box())
+        if ($(ev.target).hasClass('stage')) {
+            $(ev.target).append(box())
         } else if ($(ev.target).hasClass('box')) {
 			// Do nothing for now
         }
@@ -21,13 +24,13 @@ $(function() {
 
     $(window).bind('keydown', function(ev) {
         if (ev.keyCode == 90) {
-            stage.toggleClass('zoom')
+            world.toggleClass('zoom')
         }
     })
 
     $(window).bind('mousedown', function(ev) {
         if (ev.which == 2) { // Middle click
-            stage.toggleClass('zoom')
+            world.toggleClass('zoom')
         }
     })
 
@@ -61,11 +64,10 @@ function load() {
 function getBoxes() {
 	var boxes = []
 	$('.box').each(function(i, box) {
-		console.log(i)
-		console.log(box)
 		var boxrep = {
 			bid : $(box).data('bid'),
 			positionData : $(box).data('positionData'),
+			content : $(box).html(),
 		}
 		boxes.push(boxrep)
 	})
@@ -75,9 +77,9 @@ function getBoxes() {
 
 function setBoxes(boxes) {
 	$(boxes).each(function(i, boxRep) {
-		console.log(boxRep)
 		var tmpbox = box(boxRep.positionData)
-		$('#stage').append(tmpbox)
+		tmpbox.html(boxRep.content)
+		$(stage).append(tmpbox)
 	})
 }
 
@@ -95,7 +97,7 @@ function box(positionData) {
 				y : 0,
 				width : 160,
 				height : 160,
-			});
+			})
 	}
 
 	box.updatePositionData = function() {
@@ -108,11 +110,11 @@ function box(positionData) {
 	}
 
 	menu.bind('click', function(ev) {
-		console.log("mussisisk")
 		cmenu(ev)
 		ev.preventDefault()
 		return false
 	})
+
 	box.append(menu)
 
     box.css('position','absolute')
@@ -124,14 +126,14 @@ function box(positionData) {
 
     box.draggable(
         {
-            grid : [40, 40],
+            grid : [20, 20],
 			stop : function() { box.updatePositionData() },
         }
     )
 
     box.resizable(
         {
-            grid : [40, 40],
+            grid : [20, 20],
 			stop : function() { box.updatePositionData() },
         }
     )
@@ -172,9 +174,25 @@ function cmenu(ev) {
 		addTextInputNode(target)	
 	})
 
+    var line = $('<li><hr /></li>')
+    menu.append(line)
+
+    var remove = $('<li>Remove</li>')
+    menu.append(remove)
+	remove.bind('click', function(ev) {
+		removeNode(target)	
+	})
+
     $('body').append(cmenu).bind('click', function(ev) {
         cmenu.remove()
     })
+}
+
+/* Node handling */
+
+function removeNode(target) {
+	$(target).remove()
+	save()
 }
 
 /* Node types */
@@ -200,10 +218,9 @@ function addTextInputNode(target) {
 function addFlickrImageNode(target) {
 	var imageSrc = ''
 	$.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=?', function(data) {
-		console.log(data.items[0].media.m)
 		imageSrc = data.items[0].media.m
-			var node = $('<img src="' + imageSrc + '" />')
-			$(target).append(node)
+		var node = $('<img src="' + imageSrc + '" />')
+		$(target).append(node)
 	})
 
 }
