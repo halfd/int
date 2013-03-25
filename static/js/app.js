@@ -7,7 +7,9 @@ $(function() {
     var fadeMouseInteractiveElementsTime = 2100
 
     /* The app*/
-    stage = $('#stage1')
+    stage = $('#stage')
+
+    stageAt = 1
 
     $(window).bind('dblclick', function(ev) {
         if (world.hasClass('zoom')) {
@@ -23,8 +25,16 @@ $(function() {
     })
 
     $(window).bind('keydown', function(ev) {
+        console.log(ev.keyCode)
         if (ev.keyCode == 90) {
             world.toggleClass('zoom')
+        }
+        if (ev.keyCode == 39) {
+            ev.preventDefault()
+            nextStage()
+        } else if (ev.keyCode == 37) {
+            ev.preventDefault()
+            previousStage()
         }
     })
 
@@ -54,11 +64,14 @@ $(function() {
 })
 
 function save() {
-	localStorage.setItem('boxes', JSON.stringify(getBoxes()))
+    console.log("save - " + stageAt)
+	localStorage.setItem('boxes_' + stageAt, JSON.stringify(getBoxes()))
 }
 
 function load() {
-	setBoxes(JSON.parse(localStorage.getItem('boxes')))
+    console.log("load - " + stageAt)
+    stage.html("")
+	setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
 }
 
 function getBoxes() {
@@ -84,6 +97,27 @@ function setBoxes(boxes) {
 		})
 		$(stage).append(tmpbox)
 	})
+}
+
+function nextStage() {
+    var preStage = stageAt
+    stageAt = stageAt + 1
+    if (preStage != stageAt) {
+        load()
+    }
+}
+
+function previousStage() {
+    var preStage = stageAt
+    stageAt = (stageAt == 1) ? 1 : stageAt - 1
+    if (preStage != stageAt) {
+        load()
+    }
+}
+
+function setStage(newStage) {
+    stage = newStage
+    console.log(stage)
 }
 
 function box(boxData) {
@@ -180,7 +214,31 @@ function cmenu(ev) {
     var p3 = $('<li>Text input</li>')
     menu.append(p3)
 	p3.bind('click', function(ev) {
-		addTextInputNode(target)	
+		var node = addTextInputNode(target)
+        node.callback = function() {
+            var val = $(this).val()
+            $.getJSON('https://api.duckduckgo.com/?q=' + encodeURI(val) + '&format=json&pretty=1&callback=?', function(data) {
+                if (data != undefined ) {
+                    var p = node.parent()
+
+                    p.find('.results').remove()
+                    var results = $('<div class="results"></div>')
+                    p.append(results)
+
+                    var text = (data.Abstract != "") ? data.Abstract : data.Definition
+                    var source = (data.AbstractSource != "") ? data.AbstractSource : data.DefinitionSource
+                    results.append($('<div class="result"><h3>' + data.Heading + '</h3><span>' + text + '</span><div class="source">Souce : ' + source + '</div></div>'))
+                    $(data.RelatedTopics).each(function(i, element) {
+                        var rnode = $('<div class="result"><img /><span></span></div>')
+                        rnode.find('span').html(element.Result).find('a').bind('click', function(ev) { node.val(ev.target.innerText); node.callback(); return false})
+                        rnode.find('img').attr('src', element.Icon.URL)
+                        results.append(rnode)
+                    })
+                }
+
+            })
+        }
+        target.append(node)
 	})
 
     var line = $('<li><hr /></li>')
@@ -223,7 +281,10 @@ function addYoutubeNode(target) {
 
 function addTextInputNode(target) {
 	var node = $('<input data-type="node" type="text" id="textInputNode"></input>')
-	$(target).append(node)
+    node.callback = null
+    node.bind('keyup', function(ev) { if (ev.keyCode == 13) { node.callback() } })
+
+    return node
 }
 
 function addFlickrImageNode(target) {
