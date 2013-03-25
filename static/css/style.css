@@ -37,19 +37,19 @@ a:hover {
 }
 
 #stage2 {
-	background : pink;
+    background : pink;
     position    :   absolute;
     top         :   0;
     bottom      :   0;
-	width : 100%;
-	height : 100%;
-	right : 100%;
+    width : 100%;
+    height : 100%;
+    right : 100%;
     -webkit-transition : -webkit-transform 0.2s ease-out;
     -moz-transition : -moz-transform 0.2s ease-out;
 }
 
 #world.zoom #stage2 {
-	left : -25%;
+    left : -25%;
 }
 
 #world.zoom .stage {
@@ -74,13 +74,13 @@ a:hover {
 }
 
 .box .menu {
-	position	:	absolute;
-	top			:	0;
-	left		:	0;
-	width		:	20px;
-	height		:	20px;
+    position    :    absolute;
+    top            :    0;
+    left        :    0;
+    width        :    20px;
+    height        :    20px;
     background  :   rgba(0,0,0,0.08);
-	opacity		:	0;
+    opacity        :    0;
     -webkit-transition : opacity 0.4s ease-in-out;
     -moz-transition : opacity 0.4s ease-in-out;
 }
@@ -99,10 +99,10 @@ a:hover {
 }
 
 .box .textfield {
-	margin		:	10px;
-	font-size	:	1.2em;
-	line-height	:	140%;
-	font-weight :	100;
+    margin        :    10px;
+    font-size    :    1.2em;
+    line-height    :    140%;
+    font-weight :    100;
 }
 
 .box input {
@@ -110,16 +110,16 @@ a:hover {
     top : 0;
     left : 0;
     right : 0;
-	margin : 0;
+    margin : 0;
     padding : 10px;
-	font-size : 1.2em;
+    font-size : 1.2em;
     border : 0;
-	border-bottom : 1px #ddd solid;
+    border-bottom : 1px #ddd solid;
     color       :   #474747;
 }
 
 .box img {
-	margin : 10px;
+    margin : 10px;
     -webkit-transition : opacity 0.6s ease-in-out;
     -moz-transition : opacity 0.6s ease-in-out;
 }
@@ -152,7 +152,7 @@ body.mousemoving .box .ui-resizable-se {
 }
 
 body.mousemoving .box .menu {
-	opacity	: 1;
+    opacity    : 1;
 }
 
 /* Extensions */
@@ -184,9 +184,9 @@ div.result h3 {
 
 div.result span {
     margin      :   0;
-	font-size	:	1.2em;
-	line-height	:	140%;
-	font-weight :	100;
+    font-size    :    1.2em;
+    line-height    :    140%;
+    font-weight :    100;
 }
 
 div.result .source {

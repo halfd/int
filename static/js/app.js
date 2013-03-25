@@ -20,7 +20,7 @@ $(function() {
         if ($(ev.target).hasClass('stage')) {
             $(ev.target).append(box())
         } else if ($(ev.target).hasClass('box')) {
-			// Do nothing for now
+            // Do nothing for now
         }
     })
 
@@ -60,43 +60,43 @@ $(function() {
         //return false
     })
 
-	load()
+    load()
 })
 
 function save() {
     console.log("save - " + stageAt)
-	localStorage.setItem('boxes_' + stageAt, JSON.stringify(getBoxes()))
+    localStorage.setItem('boxes_' + stageAt, JSON.stringify(getBoxes()))
 }
 
 function load() {
     console.log("load - " + stageAt)
     stage.html("")
-	setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
+    setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
 }
 
 function getBoxes() {
-	var boxes = []
-	$('.box').each(function(i, box) {
-		var boxrep = {
-			bid : $(box).data('bid'),
-			positionData : $(box).data('positionData'),
-			content : $(box).html(),
-		}
-		boxes.push(boxrep)
-	})
+    var boxes = []
+    $('.box').each(function(i, box) {
+        var boxrep = {
+            bid : $(box).data('bid'),
+            positionData : $(box).data('positionData'),
+            content : $(box).html(),
+        }
+        boxes.push(boxrep)
+    })
 
-	return boxes
+    return boxes
 }
 
 function setBoxes(boxes) {
-	$(boxes).each(function(i, boxRep) {
-		var tmpbox = box(boxRep)
-		//tmpbox.html(boxRep.content)
-		tmpbox.find('img').css('opacity','0').bind('load',function() {
-			$(this).css('opacity','1')
-		})
-		$(stage).append(tmpbox)
-	})
+    $(boxes).each(function(i, boxRep) {
+        var tmpbox = box(boxRep)
+        //tmpbox.html(boxRep.content)
+        tmpbox.find('img').css('opacity','0').bind('load',function() {
+            $(this).css('opacity','1')
+        })
+        $(stage).append(tmpbox)
+    })
 }
 
 function nextStage() {
@@ -121,10 +121,10 @@ function setStage(newStage) {
 }
 
 function box(boxData) {
-	var box = $('<div class="box"></div>')
-	var menu = $('<div class="menu"></div>')
+    var box = $('<div class="box"></div>')
+    var menu = $('<div class="menu"></div>')
 
-	box.data('bid', Math.floor(Math.random() * 10000))
+    box.data('bid', Math.floor(Math.random() * 10000))
 
     if (boxData != undefined) {
         var positionData = boxData.positionData
@@ -132,52 +132,52 @@ function box(boxData) {
         box.find('.ui-resizable-handle, .menu').remove()
     }
 
-	if (positionData != undefined) {
-		box.data('positionData', positionData)
-	} else {
-			box.data('positionData', {
-				x : 0,
-				y : 0,
-				width : 160,
-				height : 160,
-			})
-	}
+    if (positionData != undefined) {
+        box.data('positionData', positionData)
+    } else {
+            box.data('positionData', {
+                x : 0,
+                y : 0,
+                width : 160,
+                height : 160,
+            })
+    }
 
-	box.updatePositionData = function() {
-		box.data('positionData').x = box.css('left')
-		box.data('positionData').y = box.css('top')
-		box.data('positionData').width = box.css('width')
-		box.data('positionData').height = box.css('height')
+    box.updatePositionData = function() {
+        box.data('positionData').x = box.css('left')
+        box.data('positionData').y = box.css('top')
+        box.data('positionData').width = box.css('width')
+        box.data('positionData').height = box.css('height')
 
-		save()
-	}
+        save()
+    }
 
-	menu.bind('click', function(ev) {
-		cmenu(ev)
-		ev.preventDefault()
-		return false
-	})
+    menu.bind('click', function(ev) {
+        cmenu(ev)
+        ev.preventDefault()
+        return false
+    })
 
-	box.append(menu)
+    box.append(menu)
 
     box.css('position','absolute')
-	
-	box.css('top', box.data('positionData').y)
-	box.css('left', box.data('positionData').x)
-	box.css('width', box.data('positionData').width)
-	box.css('height', box.data('positionData').height)
+    
+    box.css('top', box.data('positionData').y)
+    box.css('left', box.data('positionData').x)
+    box.css('width', box.data('positionData').width)
+    box.css('height', box.data('positionData').height)
 
     box.draggable(
         {
             grid : [20, 20],
-			stop : function() { box.updatePositionData() },
+            stop : function() { box.updatePositionData() },
         }
     )
 
     box.resizable(
         {
             grid : [20, 20],
-			stop : function() { box.updatePositionData() },
+            stop : function() { box.updatePositionData() },
         }
     )
 
@@ -185,7 +185,7 @@ function box(boxData) {
 }
 
 function cmenu(ev) {
-	var target = $(ev.target).parent()
+    var target = $(ev.target).parent()
     $('#cmenu').remove()
     var cmenu = $('<div id="cmenu"><ol></ol></div>')
 
@@ -195,26 +195,26 @@ function cmenu(ev) {
 
     var p1 = $('<li>Text content</li>')
     menu.append(p1)
-	p1.bind('click', function(ev) {
-		addTextNode(target)	
-	})
+    p1.bind('click', function(ev) {
+        addTextNode(target)    
+    })
 
     var pa2 = $('<li>Flickr content</li>')
     menu.append(pa2)
-	pa2.bind('click', function(ev) {
-		addFlickrImageNode(target)	
-	})
+    pa2.bind('click', function(ev) {
+        addFlickrImageNode(target)    
+    })
 
     var p2 = $('<li>Youtube content</li>')
     menu.append(p2)
-	p2.bind('click', function(ev) {
-		addYoutubeNode(target)	
-	})
+    p2.bind('click', function(ev) {
+        addYoutubeNode(target)    
+    })
 
     var p3 = $('<li>Text input</li>')
     menu.append(p3)
-	p3.bind('click', function(ev) {
-		var node = addTextInputNode(target)
+    p3.bind('click', function(ev) {
+        var node = addTextInputNode(target)
         node.callback = function() {
             var val = $(this).val()
             $.getJSON('https://api.duckduckgo.com/?q=' + encodeURI(val) + '&format=json&pretty=1&callback=?', function(data) {
@@ -239,16 +239,16 @@ function cmenu(ev) {
             })
         }
         target.append(node)
-	})
+    })
 
     var line = $('<li><hr /></li>')
     menu.append(line)
 
     var remove = $('<li>Remove</li>')
     menu.append(remove)
-	remove.bind('click', function(ev) {
-		removeNode(target)	
-	})
+    remove.bind('click', function(ev) {
+        removeNode(target)    
+    })
 
     $('body').append(cmenu).bind('click', function(ev) {
         cmenu.remove()
@@ -258,29 +258,29 @@ function cmenu(ev) {
 /* Node handling */
 
 function removeNode(target) {
-	$(target).remove()
-	save()
+    $(target).remove()
+    save()
 }
 
 /* Node types */
 
 function addTextNode(target) {
-	var write = document.createElement('div')
-	$(target).append(write)
-	write.contentEditable = true
-	write.focus()
+    var write = document.createElement('div')
+    $(target).append(write)
+    write.contentEditable = true
+    write.focus()
     write.setAttribute('data-type','node')
-	write.className = 'textfield'
+    write.className = 'textfield'
     write.onclick=function(ev) { ev.preventDefault(); return false }
 }
 
 function addYoutubeNode(target) {
-	var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
-	$(target).append(node)
+    var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+    $(target).append(node)
 }
 
 function addTextInputNode(target) {
-	var node = $('<input data-type="node" type="text" id="textInputNode"></input>')
+    var node = $('<input data-type="node" type="text" id="textInputNode"></input>')
     node.callback = null
     node.bind('keyup', function(ev) { if (ev.keyCode == 13) { node.callback() } })
 
@@ -288,15 +288,15 @@ function addTextInputNode(target) {
 }
 
 function addFlickrImageNode(target) {
-	var imageSrc = ''
-	$.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=?', function(data) {
-		imageSrc = data.items[0].media.m
-		var node = $('<img data-type="node" src="' + imageSrc + '" />')
-		node.css('opacity','0')
-		node.bind('load', function() {
-			node.css('opacity','1')
-		})
-		$(target).append(node)
-	})
+    var imageSrc = ''
+    $.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&jsoncallback=?', function(data) {
+        imageSrc = data.items[0].media.m
+        var node = $('<img data-type="node" src="' + imageSrc + '" />')
+        node.css('opacity','0')
+        node.bind('load', function() {
+            node.css('opacity','1')
+        })
+        $(target).append(node)
+    })
 
 }
