@@ -1,5 +1,6 @@
 var stage = null
 var world = $('#world')
+var globalvar = null
 
 $(function() {
     /* Constants */
@@ -211,6 +212,12 @@ function cmenu(ev) {
         addYoutubeNode(target)    
     })
 
+    var p5 = $('<li>Wiki receiver</li>')
+    menu.append(p5)
+    p5.bind('click', function(ev) {
+        $(target).append('<div class="wikirec"></div>')
+    })
+
     var p3 = $('<li>Text input</li>')
     menu.append(p3)
     p3.bind('click', function(ev) {
@@ -230,7 +237,12 @@ function cmenu(ev) {
                     results.append($('<div class="result"><h3>' + data.Heading + '</h3><span>' + text + '</span><div class="source">Souce : ' + source + '</div></div>'))
                     $(data.RelatedTopics).each(function(i, element) {
                         var rnode = $('<div class="result"><img /><span></span></div>')
-                        rnode.find('span').html(element.Result).find('a').bind('click', function(ev) { node.val(ev.target.innerText); node.callback(); return false})
+                        rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
+                            var query = ev.target.innerText
+                            getWiki(query);
+                            //node.callback()
+                            return false
+                        })
                         rnode.find('img').attr('src', element.Icon.URL)
                         results.append(rnode)
                     })
@@ -299,4 +311,13 @@ function addFlickrImageNode(target) {
         $(target).append(node)
     })
 
+}
+
+function getWiki(query) {
+    $.getJSON("http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
+        var wikitext = data.parse.text['*'];
+        $('.wikirec').html("").append('<div class="wikitext">' + wikitext + '</div>')
+        $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
+        $('.wikitext a').bind('click', function() { getWiki(this.innerText) })
+    })
 }

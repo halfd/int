@@ -203,3 +203,71 @@ div.result img {
     padding     :   2px;
     border      :   1px #e2e2e2 solid;
 }
+
+.wikirec {
+    position    :   absolute;
+    top         :   0;
+    left        :   0;
+    right       :   0;
+    bottom      :   0;
+    overflow-y  :   scroll;
+    overflow-x  :   hidden;
+    margin      :   10px;
+    line-height :   160%;
+}
+
+.wikirec p {
+    margin      :   0 0 15px 0;
+}
+
+.wikirec h2 {
+    font-size   :   1.7em;
+    font-weight : 100;
+    margin      :    10px 0 10px 0;
+    color       :   #666;
+}
+
+.wikirec h3 {
+    font-size   :   1.4em;
+    font-weight : 100;
+    margin      :    0 0 10px 0;
+    color       :   #666;
+}
+
+.wikirec .editsection, .wikirec .metadata {
+    display     :   none;
+}
+
+.wikirec .infobox {
+    float       :   right;
+}
+
+.wikirec .tright {
+    float       :   right;
+}
+
+.wikirec .tleft {
+    float       :   left;
+}
+
+.wikirec .thumb {
+    margin      :   10px;
+}
+
+.wikirec .thumb img {
+    margin      :   0;
+    padding     :   2px;
+    border      :   1px #e2e2e2 solid;
+    background  :   #efefef;
+}
+
+.wikirec .thumbcaption {
+    font-size   :   0.8em;
+    line-height :   100%;
+}
+
+.wikirec sup {
+    vertical-align : super;
+    font-size : 0.6em;
+    margin-left : 3px;
+}
