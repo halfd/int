@@ -212,8 +212,12 @@ div.result img {
     bottom      :   0;
     overflow-y  :   scroll;
     overflow-x  :   hidden;
-    margin      :   10px;
+    margin      :   0;
     line-height :   160%;
+}
+
+.wikirec .wikitext {
+    margin      :   10px;
 }
 
 .wikirec p {
@@ -232,6 +236,15 @@ div.result img {
     font-weight : 100;
     margin      :    0 0 10px 0;
     color       :   #666;
+}
+
+.wikirec ul, .wikirec ol {
+    margin      :   10px;
+    list-style  :   square;
+}
+
+.wikirec li {
+    margin      :   10px;
 }
 
 .wikirec .editsection, .wikirec .metadata {
