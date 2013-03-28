@@ -10,7 +10,8 @@ $(function() {
     /* The app*/
     stage = $('#stage')
 
-    stageAt = 1
+    stageAt = Number(localStorage.getItem('stageAt'))
+    if (stageAt == undefined) stageAt = 1
 
     $(window).bind('dblclick', function(ev) {
         if (world.hasClass('zoom')) {
@@ -39,7 +40,7 @@ $(function() {
         }
     })
 
-    $(window).bind('mousedown', function(ev) {
+    $(window).bind('dddmousedown', function(ev) {
         if (ev.which == 2) { // Middle click
             world.toggleClass('zoom')
         }
@@ -103,6 +104,7 @@ function setBoxes(boxes) {
 function nextStage() {
     var preStage = stageAt
     stageAt = stageAt + 1
+    localStorage.setItem('stageAt', stageAt)
     if (preStage != stageAt) {
         load()
     }
@@ -111,6 +113,7 @@ function nextStage() {
 function previousStage() {
     var preStage = stageAt
     stageAt = (stageAt == 1) ? 1 : stageAt - 1
+    localStorage.setItem('stageAt', stageAt)
     if (preStage != stageAt) {
         load()
     }
@@ -197,7 +200,7 @@ function cmenu(ev) {
     var p1 = $('<li>Text content</li>')
     menu.append(p1)
     p1.bind('click', function(ev) {
-        addTextNode(target)    
+        addTextNode(target)
     })
 
     var pa2 = $('<li>Flickr content</li>')
@@ -238,9 +241,16 @@ function cmenu(ev) {
                     $(data.RelatedTopics).each(function(i, element) {
                         var rnode = $('<div class="result"><img /><span></span></div>')
                         rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
-                            var query = ev.target.innerText
-                            getWiki(query);
-                            //node.callback()
+                            
+                            if (/\/c\//.test(ev.target.href)) {
+                                console.log('int the this')
+                                node.val(ev.target.innerText)
+                                node.callback()
+                            } else {
+                                console.log('goint to wikip')
+                                var query = ev.target.innerText
+                                getWiki(query);
+                            }
                             return false
                         })
                         rnode.find('img').attr('src', element.Icon.URL)
@@ -313,11 +323,15 @@ function addFlickrImageNode(target) {
 
 }
 
+/* Sources */
+
 function getWiki(query) {
     $.getJSON("http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
+        var wikititle = data.parse.title;
         var wikitext = data.parse.text['*'];
-        $('.wikirec').html("").append('<div class="wikitext">' + wikitext + '</div>')
+        $('.wikirec').html("").append('<div class="wikitext"><h2>' + wikititle + '</h2>' + wikitext + '</div>')
         $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
-        $('.wikitext a').bind('click', function() { getWiki(this.innerText) })
+        $('.wikitext a').bind('click', function() { getWiki(this.title); return false })
+        $('.wikirec')[0].scrollByPages(-100)
     })
 }
