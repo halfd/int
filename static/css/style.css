@@ -1,0 +1,286 @@
+body {
+    font-family : "Helvetica", sans-serif;
+    font-weight : 100;
+    color       :   #525250;
+    background-color    :   000;
+    background-image : url('../images/space.jpg');
+    background-repeat : no-repeat;
+    background-size : cover;
+}
+
+a {
+    color : #27b;
+    text-decoration : none;
+    border-bottom : 1px #38c dashed;
+}
+
+a:visited {
+    color : #72a;
+    border-bottom : 1px #83b dashed;
+}
+
+a:hover {
+    border-bottom-style : solid;
+}
+
+#stage {
+    position    :   absolute;
+    top         :   0;
+    bottom      :   0;
+    right       :   0;
+    left        :   0;
+    background  :   #4ab2a9;
+    -webkit-transition : -webkit-transform 0.2s ease-out;
+    -moz-transition : -moz-transform 0.2s ease-out;
+    z-index : 1;
+    box-shadow  :   0 0 30px 30px rgba(80,160,230,0.5);
+}
+
+#stage2 {
+    background : pink;
+    position    :   absolute;
+    top         :   0;
+    bottom      :   0;
+    width : 100%;
+    height : 100%;
+    right : 100%;
+    -webkit-transition : -webkit-transform 0.2s ease-out;
+    -moz-transition : -moz-transform 0.2s ease-out;
+}
+
+#world.zoom #stage2 {
+    left : -25%;
+}
+
+#world.zoom .stage {
+    -webkit-transform : scale(0.2);
+    -moz-transform : scale(0.2);
+}
+
+.box {
+    position : absolute;
+    width   :   160px;
+    height  :   160px;
+
+    background-color : #f5f5f5;
+    border : 1px #dfdfdf solid;
+    padding : 0;
+    -webkit-transition : -webkit-transform 0.8s ease-out;
+    -moz-transition : -moz-transform 0.8s ease-out;
+}
+
+.box.ui-draggable-dragging {
+    box-shadow  :   0 0 5px rgba(0,0,0,0.2)
+}
+
+.box .menu {
+    position    :    absolute;
+    top            :    0;
+    left        :    0;
+    width        :    20px;
+    height        :    20px;
+    background  :   rgba(0,0,0,0.08);
+    opacity        :    0;
+    -webkit-transition : opacity 0.4s ease-in-out;
+    -moz-transition : opacity 0.4s ease-in-out;
+}
+
+.box .ui-resizable-se {
+    width       :   20px;
+    height      :   20px;
+    background  :   rgba(0,0,0,0.08);
+    position    :   absolute;
+    bottom      :   0;
+    right       :   0;
+    opacity     :   0;
+    border-radius   :   2px 0 0 0;
+    -webkit-transition : opacity 0.4s ease-in-out;
+    -moz-transition : opacity 0.4s ease-in-out;
+}
+
+.box .textfield {
+    margin        :    10px;
+    font-size    :    1.2em;
+    line-height    :    140%;
+    font-weight :    100;
+}
+
+.box input {
+    position : absolute;
+    top : 0;
+    left : 0;
+    right : 0;
+    margin : 0;
+    padding : 10px;
+    font-size : 1.2em;
+    border : 0;
+    border-bottom : 1px #ddd solid;
+    color       :   #474747;
+}
+
+.box img {
+    margin : 10px;
+    -webkit-transition : opacity 0.6s ease-in-out;
+    -moz-transition : opacity 0.6s ease-in-out;
+}
+
+#cmenu {
+    position    : absolute;
+    background : #fafafa;
+    min-width : 200px;
+    z-index : 1000;
+    box-shadow : 0 0 10px rgba(120,120,120,0.3);
+    border-radius : 3px;
+    padding : 2px;
+}
+
+#cmenu ol li {
+    color : #555;
+    padding : 10px;
+    margin : 0;
+}
+
+#cmenu ol li:hover {
+    background : #dfdfdf;
+    cursor : pointer;
+}
+
+/* Whatever needs to be visible on mouse move should have a place here */
+
+body.mousemoving .box .ui-resizable-se {
+    opacity : 1;
+}
+
+body.mousemoving .box .menu {
+    opacity    : 1;
+}
+
+/* Extensions */
+
+.results {
+    position    :   absolute;
+    top         :   44px;
+    left        :   0;
+    right       :   0;
+    bottom      :   0;
+    overflow-y  :   scroll;
+    overflow-x  :   hidden;
+}
+
+div.result {
+    padding : 10px;
+    border-bottom : 1px #c9c9c9 solid;
+    overflow : hidden;
+    font-size   :   0.8em;
+}
+
+div.result h3 {
+    font-size   :   1.8em;
+    font-weight : 100;
+    margin      :    0 0 10px 0;
+    color       :   #666;
+
+}
+
+div.result span {
+    margin      :   0;
+    font-size    :    1.2em;
+    line-height    :    140%;
+    font-weight :    100;
+}
+
+div.result .source {
+    margin : 10px 0 0 0;
+    font-size   :   0.8;
+    color : #999;
+}
+
+div.result img {
+    float       :   left;
+    max-width   :   60px;
+    max-height  :   60px;
+    margin      :   0 10px 10px 0;
+    padding     :   2px;
+    border      :   1px #e2e2e2 solid;
+}
+
+.wikirec {
+    position    :   absolute;
+    top         :   0;
+    left        :   0;
+    right       :   0;
+    bottom      :   0;
+    overflow-y  :   scroll;
+    overflow-x  :   hidden;
+    margin      :   0;
+    line-height :   160%;
+}
+
+.wikirec .wikitext {
+    margin      :   10px;
+}
+
+.wikirec p {
+    margin      :   0 0 15px 0;
+}
+
+.wikirec h2 {
+    font-size   :   1.7em;
+    font-weight : 100;
+    margin      :    10px 0 10px 0;
+    color       :   #666;
+}
+
+.wikirec h3 {
+    font-size   :   1.4em;
+    font-weight : 100;
+    margin      :    0 0 10px 0;
+    color       :   #666;
+}
+
+.wikirec ul, .wikirec ol {
+    margin      :   10px;
+    list-style  :   square;
+}
+
+.wikirec li {
+    margin      :   10px;
+}
+
+.wikirec .editsection, .wikirec .metadata {
+    display     :   none;
+}
+
+.wikirec .infobox {
+    float       :   right;
+}
+
+.wikirec .tright {
+    float       :   right;
+}
+
+.wikirec .tleft {
+    float       :   left;
+}
+
+.wikirec .thumb {
+    margin      :   10px;
+}
+
+.wikirec .thumb img {
+    margin      :   0;
+    padding     :   2px;
+    border      :   1px #e2e2e2 solid;
+    background  :   #efefef;
+}
+
+.wikirec .thumbcaption {
+    font-size   :   0.8em;
+    line-height :   100%;
+}
+
+.wikirec sup {
+    vertical-align : super;
+    font-size : 0.6em;
+    margin-left : 3px;
+}
