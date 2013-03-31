@@ -40,7 +40,7 @@ $(function() {
         }
     })
 
-    $(window).bind('dddmousedown', function(ev) {
+    $(window).bind('mousedown', function(ev) {
         if (ev.which == 2) { // Middle click
             world.toggleClass('zoom')
         }
