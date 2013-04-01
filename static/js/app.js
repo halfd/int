@@ -13,7 +13,7 @@ $(function() {
     stageAt = Number(localStorage.getItem('stageAt'))
     if (stageAt == undefined) stageAt = 1
 
-    $(window).bind('dblclick', function(ev) {
+    $(window).bind('dblclick, touchend', function(ev) {
         if (world.hasClass('zoom')) {
             world.removeClass('zoom')
             return
