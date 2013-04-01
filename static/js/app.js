@@ -13,7 +13,7 @@ $(function() {
     stageAt = Number(localStorage.getItem('stageAt'))
     if (stageAt == undefined) stageAt = 1
 
-    $(window).bind('dblclick, touchend', function(ev) {
+    $(window).bind('touchend', function(ev) {
         if (world.hasClass('zoom')) {
             world.removeClass('zoom')
             return
@@ -40,10 +40,8 @@ $(function() {
         }
     })
 
-    $(window).bind('mousedown', function(ev) {
-        if (ev.which == 2) { // Middle click
-            world.toggleClass('zoom')
-        }
+    $(window).bind('gesturechange', function(ev) {
+        world.toggleClass('zoom')
     })
 
     $(window).bind('mousemove', function(ev) {
