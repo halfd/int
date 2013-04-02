@@ -1,6 +1,7 @@
 body {
     font-family : "Helvetica", sans-serif;
     font-weight : 100;
+    font-size   :   0.8em;
     color       :   #525250;
     background-color    :   000;
     background-image : url('../images/space.jpg');
@@ -21,6 +22,71 @@ a:visited {
 
 a:hover {
     border-bottom-style : solid;
+}
+
+#globalmenu {
+    position    :   absolute;
+    top         :   -100%;
+    bottom      :   auto;
+    right       :   0;
+    left        :   0;
+    z-index     :   2;
+    background  :   transparent;
+    -webkit-transition : background 0.2s linear;
+    -moz-transition : background 0.2s linear;
+}
+
+#globalmenu #menumenu {
+    position    :   absolute;
+    top         :   -100%;
+    left        :   0;
+    right       :   0;
+    height      :   40px;
+    padding     :   10px;
+    color       :   #efefef;
+    border-bottom   :   1px #ededed solid;
+    background-image : -moz-linear-gradient(top, rgb(68, 68, 68), rgb(45, 45, 45));
+    -webkit-transition : top 0.25s ease-in;
+    -moz-transition : top 0.25s ease-in;
+}
+
+#globalmenu.active {
+    top         :   0;
+    bottom      :   0;
+    background  :   rgba(0, 0, 0, 0.61);
+}
+
+#globalmenu.active #menumenu {
+    top         :   0;
+
+}
+
+#menumenu div {
+    width       :   120px;
+    text-align  :   center;
+    height      :   40px;
+    font-size   :   1.4em;
+    font-weight :   bold;
+    background  :   #000;
+}
+
+#modechanger {
+    float       :   left;
+}
+
+#menu_prev {
+    float       :   left;
+}
+
+#menu_next {
+    float       :   right;
+    width       :   120px;
+    text-align  :   center;
+}
+
+#world.locked .ui-resizable-handle,
+#world.locked .menu {
+    display     :   none !important;
 }
 
 #stage {
@@ -77,8 +143,8 @@ a:hover {
     position    :    absolute;
     top            :    0;
     left        :    0;
-    width        :    20px;
-    height        :    20px;
+    width        :    40px;
+    height        :    40px;
     background  :   rgba(0,0,0,0.08);
     opacity        :    0;
     -webkit-transition : opacity 0.4s ease-in-out;
@@ -86,8 +152,8 @@ a:hover {
 }
 
 .box .ui-resizable-se {
-    width       :   20px;
-    height      :   20px;
+    width       :   40px;
+    height      :   40px;
     background  :   rgba(0,0,0,0.08);
     position    :   absolute;
     bottom      :   0;
@@ -156,6 +222,11 @@ body.mousemoving .box .menu {
 }
 
 /* Extensions */
+
+.debug {
+    margin      :   10px;
+    font-family :   monospace;
+}
 
 .results {
     position    :   absolute;

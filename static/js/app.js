@@ -2,6 +2,13 @@ var stage = null
 var world = $('#world')
 var globalvar = null
 
+var startingGlobalMenu = false
+
+var debug = function(str) {
+    $('.console').append($('<div>' + str + '</div>')).bind('click', function(ev) { $(this).find('div').remove() })
+    console.log(str)
+}
+
 $(function() {
     /* Constants */
 
@@ -13,7 +20,39 @@ $(function() {
     stageAt = Number(localStorage.getItem('stageAt'))
     if (stageAt == undefined) stageAt = 1
 
+    $(stage).bind('touchstart', function(ev) {
+        var y = ev.originalEvent.touches[0].pageY
+        if (y < 15) {
+            startingGlobalMenu = true
+        }
+        debug('touchstart - stage der')
+        debug('Start Y : ' + y)
+        //y = event.touches[0].pageY;
+        //return false
+    })
+
+    $(stage).bind('touchmove', function(ev) {
+        ev.preventDefault()
+        if (startingGlobalMenu) {
+            var y = ev.originalEvent.touches[0].pageY
+
+            if (y > 30) {
+                startingGlobalMenu = false
+                debug('GLOBALMENU - stage')
+                $('#globalmenu').toggleClass('active')
+            }
+            return false
+        } else {
+            return false
+        }
+    })
+
     $(stage).bind('touchend', function(ev) {
+        debug('touchend - stage')
+        //return false
+    })
+
+    $(stage).bind('click', function(ev) {
         if (world.hasClass('zoom')) {
             world.removeClass('zoom')
             return
@@ -26,8 +65,16 @@ $(function() {
         }
     })
 
+    $('#globalmenu').bind('click', function(ev) {
+        $('#globalmenu').removeClass('active')
+    })
+
+    $('#globalmenu').bind('touchmove', function(ev) {
+        return false
+    })
+
     $(window).bind('keydown', function(ev) {
-        console.log(ev.keyCode)
+        debug(ev.keyCode)
         if (ev.keyCode == 90) {
             world.toggleClass('zoom')
         }
@@ -60,16 +107,25 @@ $(function() {
         //return false
     })
 
+    $('#menu_prev').bind('click', function(ev) { previousStage() })
+    $('#menu_next').bind('click', function(ev) { nextStage() })
+
+    $('#modechanger').bind('click', function(ev) {
+        $('#world').addClass('locked')
+        $('.ui-draggable').draggable('disable')
+        $('.ui-resizable').resizable('disable')
+    })
+
     load()
 })
 
 function save() {
-    console.log("save - " + stageAt)
+    debug("save - " + stageAt)
     localStorage.setItem('boxes_' + stageAt, JSON.stringify(getBoxes()))
 }
 
 function load() {
-    console.log("load - " + stageAt)
+    debug("load - " + stageAt)
     stage.html("")
     setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
 }
@@ -119,7 +175,7 @@ function previousStage() {
 
 function setStage(newStage) {
     stage = newStage
-    console.log(stage)
+    debug(stage)
 }
 
 function box(boxData) {
@@ -241,11 +297,11 @@ function cmenu(ev) {
                         rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
                             
                             if (/\/c\//.test(ev.target.href)) {
-                                console.log('int the this')
+                                debug('int the this')
                                 node.val(ev.target.innerText)
                                 node.callback()
                             } else {
-                                console.log('goint to wikip')
+                                debug('goint to wikip')
                                 var query = ev.target.innerText
                                 getWiki(query);
                             }
@@ -259,6 +315,12 @@ function cmenu(ev) {
             })
         }
         target.append(node)
+    })
+
+    var debug = $('<li>Debug log</li>')
+    menu.append(debug)
+    debug.bind('click', function(ev) {
+        $(target).append('<div class="console"></div>')
     })
 
     var line = $('<li><hr /></li>')
@@ -301,6 +363,7 @@ function addYoutubeNode(target) {
 
 function addTextInputNode(target) {
     var node = $('<input data-type="node" type="text" id="textInputNode"></input>')
+    node.bind('click', function(ev) { ev.preventDefault() })
     node.callback = null
     node.bind('keyup', function(ev) { if (ev.keyCode == 13) { node.callback() } })
 
