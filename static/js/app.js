@@ -165,7 +165,7 @@ function box(boxData) {
     box.append(menu)
 
     box.css('position','absolute')
-    
+
     box.css('top', box.data('positionData').y)
     box.css('left', box.data('positionData').x)
     box.css('width', box.data('positionData').width)
@@ -184,6 +184,14 @@ function box(boxData) {
             stop : function() { box.updatePositionData() },
         }
     )
+
+    var r = Math.floor(Math.random() * 127) + 64
+    var g = Math.floor(Math.random() * 127) + 64
+    var b = Math.floor(Math.random() * 127) + 64
+
+    var rgbstr = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+
+    box.css('background', rgbstr)
 
     return box
 }
@@ -241,7 +249,7 @@ function cmenu(ev) {
                     $(data.RelatedTopics).each(function(i, element) {
                         var rnode = $('<div class="result"><img /><span></span></div>')
                         rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
-                            
+                            ev.preventDefault()
                             if (/\/c\//.test(ev.target.href)) {
                                 console.log('int the this')
                                 node.val(ev.target.innerText)
