@@ -65,6 +65,18 @@ $(function() {
     load()
 })
 
+function setEditMode(state) {
+    if (state) {
+        $('#world').removeClass('locked')
+        $('.ui-draggable').draggable('enable')
+        $('.ui-resizable').resizable('enable')
+    } else {
+        $('#world').addClass('locked')
+        $('.ui-draggable').draggable('disable')
+        $('.ui-resizable').resizable('disable')
+    }
+}
+
 function save() {
     console.log("save - " + stageAt)
     localStorage.setItem('boxes_' + stageAt, JSON.stringify(getBoxes()))
@@ -372,7 +384,14 @@ function getWiki(query) {
         var wikitext = data.parse.text['*']
         $('.wikirec').html("").append('<div class="wikitext"><h2>' + wikititle + '</h2>' + wikitext + '</div>')
         $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
-        $('.wikitext a').bind('click', function() { getWiki(this.title); return false })
+        $('.wikitext a').bind('click', function() {
+            if (ev.target.attributes.getNamedItem('href').value.indexOf('#') == 0) {
+
+            } else {
+                getWiki(this.title);
+                return false
+            }
+        })
         $('.wikirec')[0].scrollByPages(-100)
     })
 }
