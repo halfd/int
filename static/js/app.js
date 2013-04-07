@@ -2,6 +2,10 @@ var stage = null
 var world = $('#world')
 var globalvar = null
 
+var debug = function(str) {
+    $('.console').append($('<div>' + str + '</div>')).bind('click', function(ev) { $(this).find('div').remove() })
+    console.log(str)
+}
 $(function() {
     /* Constants */
 
@@ -306,6 +310,12 @@ function cmenu(ev) {
         $(target).append(node)
     })
 
+    var debug = $('<li>Debug log</li>')
+    menu.append(debug)
+    debug.bind('click', function(ev) {
+        $(target).append('<div class="console"></div>')
+    })
+
     var line = $('<li><hr /></li>')
     menu.append(line)
 
@@ -340,7 +350,8 @@ function addTextNode(target) {
 }
 
 function addYoutubeNode(target) {
-    var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+    //var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+    var node = $('<iframe width="480" height="360" src="https://www.youtube-nocookie.com/embed/j7dizbMC_2Q" frameborder="0" allowfullscreen></iframe>')
     $(target).append(node)
 }
 
