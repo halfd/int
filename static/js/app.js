@@ -82,6 +82,7 @@ function getBoxes() {
         var boxrep = {
             bid : $(box).data('bid'),
             positionData : $(box).data('positionData'),
+            metaData : $(box).data('metaData'),
             content : $(box).html(),
         }
         boxes.push(boxrep)
@@ -134,17 +135,27 @@ function box(boxData) {
         var positionData = boxData.positionData
         box.html(boxData.content)
         box.find('.ui-resizable-handle, .menu').remove()
+
+        var metaData = boxData.metaData
     }
 
     if (positionData != undefined) {
         box.data('positionData', positionData)
     } else {
-            box.data('positionData', {
-                x : 0,
-                y : 0,
-                width : 160,
-                height : 160,
-            })
+        box.data('positionData', {
+            x : 0,
+            y : 0,
+            width : 160,
+            height : 160,
+        })
+    }
+
+    if (metaData != undefined) {
+        box.data('metaData', metaData)
+    } else {
+        box.data('metaData', {
+            backgroundColor : '#f9f9f9',
+        })
     }
 
     box.updatePositionData = function() {
@@ -153,6 +164,14 @@ function box(boxData) {
         box.data('positionData').width = box.css('width')
         box.data('positionData').height = box.css('height')
 
+        box.updateMetaData()
+
+        save()
+    }
+
+    box.updateMetaData = function() {
+        box.data('metaData').backgroundColor = box.css('background-color')
+        box.data('metaData').colored = box.hasClass('colored')
         save()
     }
 
@@ -171,6 +190,12 @@ function box(boxData) {
     box.css('width', box.data('positionData').width)
     box.css('height', box.data('positionData').height)
 
+    box.css('background-color', box.data('metaData').backgroundColor)
+
+    if (box.data('metaData').colored) {
+        box.addClass('colored')
+    }
+
     box.draggable(
         {
             grid : [20, 20],
@@ -185,19 +210,11 @@ function box(boxData) {
         }
     )
 
-    var r = Math.floor(Math.random() * 127) + 64
-    var g = Math.floor(Math.random() * 127) + 64
-    var b = Math.floor(Math.random() * 127) + 64
-
-    var rgbstr = 'rgb(' + r + ', ' + g + ', ' + b + ')'
-
-    box.css('background', rgbstr)
-
     return box
 }
 
 function cmenu(ev) {
-    var target = $(ev.target).parent()
+    var target = $(ev.target).parent()[0]
     $('#cmenu').remove()
     var cmenu = $('<div id="cmenu"><ol></ol></div>')
 
@@ -214,13 +231,19 @@ function cmenu(ev) {
     var pa2 = $('<li>Flickr content</li>')
     menu.append(pa2)
     pa2.bind('click', function(ev) {
-        addFlickrImageNode(target)    
+        addFlickrImageNode(target)
+    })
+
+    var pb2 = $('<li>Color node</li>')
+    menu.append(pb2)
+    pb2.bind('click', function(ev) {
+        colorNode(target)
     })
 
     var p2 = $('<li>Youtube content</li>')
     menu.append(p2)
     p2.bind('click', function(ev) {
-        addYoutubeNode(target)    
+        addYoutubeNode(target)
     })
 
     var p5 = $('<li>Wiki receiver</li>')
@@ -257,7 +280,7 @@ function cmenu(ev) {
                             } else {
                                 console.log('goint to wikip')
                                 var query = ev.target.innerText
-                                getWiki(query);
+                                getWiki(query)
                             }
                             return false
                         })
@@ -268,7 +291,7 @@ function cmenu(ev) {
 
             })
         }
-        target.append(node)
+        $(target).append(node)
     })
 
     var line = $('<li><hr /></li>')
@@ -331,12 +354,22 @@ function addFlickrImageNode(target) {
 
 }
 
+function colorNode(target) {
+    var r = Math.floor(Math.random() * 127) + 64
+    var g = Math.floor(Math.random() * 127) + 64
+    var b = Math.floor(Math.random() * 127) + 64
+
+    var rgbstr = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+
+    $(target).css('background', rgbstr).addClass('colored')
+}
+
 /* Sources */
 
 function getWiki(query) {
     $.getJSON("http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
-        var wikititle = data.parse.title;
-        var wikitext = data.parse.text['*'];
+        var wikititle = data.parse.title
+        var wikitext = data.parse.text['*']
         $('.wikirec').html("").append('<div class="wikitext"><h2>' + wikititle + '</h2>' + wikitext + '</div>')
         $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
         $('.wikitext a').bind('click', function() { getWiki(this.title); return false })
