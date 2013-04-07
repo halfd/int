@@ -130,6 +130,18 @@ function load() {
     setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
 }
 
+function setEditMode(state) {
+    if (state) {
+        $('#world').addClass('locked')
+        $('.ui-draggable').draggable('disable')
+        $('.ui-resizable').resizable('disable')
+    } else {
+        $('#world').removeClass('locked')
+        $('.ui-draggable').draggable('enable')
+        $('.ui-resizable').resizable('enable')
+    }
+}
+
 function getBoxes() {
     var boxes = []
     $('.box').each(function(i, box) {
