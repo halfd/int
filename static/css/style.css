@@ -1,18 +1,32 @@
+@font-face {
+    font-family :   'Open Sans';
+    src         :   url('../fonts/OpenSans-Regular-webfont.ttf') format('truetype');
+    font-weight :   normal;
+    font-style  :   normal;
+}
+
+@font-face {
+    font-family :   'Open Sans Light';
+    src         :   url('../fonts/OpenSans-Light-webfont.ttf') format('truetype');
+    font-weight :   normal;
+    font-style  :   normal;
+}
+
 body {
     font-family : "Helvetica", sans-serif;
     font-weight : 100;
     font-size   :   0.8em;
     color       :   #525250;
-    background-color    :   000;
+    background-color    :   #000;
     background-image : url('../images/space.jpg');
     background-repeat : no-repeat;
     background-size : cover;
 }
 
 a {
-    color : #27b;
+    color : #37a;
     text-decoration : none;
-    border-bottom : 1px #38c dashed;
+    border-bottom : 1px #7ae dashed;
 }
 
 a:visited {
@@ -89,13 +103,18 @@ a:hover {
     display     :   none !important;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family :   "Open Sans Light", sans-serif;
+    font-weight : normal !important;
+}
+
 #stage {
     position    :   absolute;
     top         :   0;
     bottom      :   0;
     right       :   0;
     left        :   0;
-    background  :   #4ab2a9;
+    background  :   rgb(127, 127, 127); //rgb(219, 217, 214);
     -webkit-transition : -webkit-transform 0.2s ease-out;
     -moz-transition : -moz-transform 0.2s ease-out;
     z-index : 1;
@@ -129,39 +148,43 @@ a:hover {
     height  :   160px;
 
     background-color : #f5f5f5;
-    border : 1px #dfdfdf solid;
     padding : 0;
     -webkit-transition : -webkit-transform 0.8s ease-out;
     -moz-transition : -moz-transform 0.8s ease-out;
+    color : #666;
+    overflow        :   hidden;
 }
 
 .box.ui-draggable-dragging {
     box-shadow  :   0 0 5px rgba(0,0,0,0.2)
 }
 
-.box .menu {
+.box .menu,
+.box .ui-resizable-se {
     position    :    absolute;
     top            :    0;
     left        :    0;
     width        :    40px;
     height        :    40px;
-    background  :   rgba(0,0,0,0.08);
+    background  :   rgba(0,0,0,0.04);
     opacity        :    0;
     -webkit-transition : opacity 0.4s ease-in-out;
     -moz-transition : opacity 0.4s ease-in-out;
 }
 
+.box .menu {
+    top            :    0;
+    left        :    0;
+}
+
 .box .ui-resizable-se {
-    width       :   40px;
-    height      :   40px;
-    background  :   rgba(0,0,0,0.08);
-    position    :   absolute;
     bottom      :   0;
     right       :   0;
-    opacity     :   0;
-    border-radius   :   2px 0 0 0;
-    -webkit-transition : opacity 0.4s ease-in-out;
-    -moz-transition : opacity 0.4s ease-in-out;
+}
+
+.box:hover .menu,
+.box:hover .ui-resizable-se {
+    background  :   rgba(0, 0, 0, 0.06);
 }
 
 .box .textfield {
@@ -180,14 +203,26 @@ a:hover {
     padding : 10px;
     font-size : 1.2em;
     border : 0;
-    border-bottom : 1px #ddd solid;
+    border-bottom : 1px rgba(0, 0, 0, 0.1) solid;
     color       :   #474747;
+}
+
+.box input:focus {
+    outline: rgb(0, 194, 255) 1px solid;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
 }
 
 .box img {
     margin : 10px;
     -webkit-transition : opacity 0.6s ease-in-out;
     -moz-transition : opacity 0.6s ease-in-out;
+}
+
+
+#world.locked .box .ui-resizable-se,
+#world.locked .box .menu
+{
+    display     :   none !important;
 }
 
 #cmenu {
@@ -232,7 +267,7 @@ body.mousemoving .box .menu {
     position    :   absolute;
     top         :   44px;
     left        :   0;
-    right       :   0;
+    right       :   -15px;
     bottom      :   0;
     overflow-y  :   scroll;
     overflow-x  :   hidden;
@@ -249,8 +284,7 @@ div.result h3 {
     font-size   :   1.8em;
     font-weight : 100;
     margin      :    0 0 10px 0;
-    color       :   #666;
-
+    color       :   rgba(0, 0, 0, 0.5);
 }
 
 div.result span {
@@ -263,7 +297,7 @@ div.result span {
 div.result .source {
     margin : 10px 0 0 0;
     font-size   :   0.8;
-    color : #999;
+    color       :   rgba(0, 0, 0, 0.4);
 }
 
 div.result img {
@@ -275,11 +309,23 @@ div.result img {
     border      :   1px #e2e2e2 solid;
 }
 
+
+.box.colored .result h3,
+.box.colored .result .source,
+.box.colored {
+    color       :   rgba(245, 245, 245, 0.7);
+}
+
+.box.colored a {
+    color       :   rgba(0, 0, 0, 0.4);
+    border-bottom : 0;
+}
+
 .wikirec {
     position    :   absolute;
     top         :   0;
     left        :   0;
-    right       :   0;
+    right       :   -15px;
     bottom      :   0;
     overflow-y  :   scroll;
     overflow-x  :   hidden;
@@ -295,18 +341,30 @@ div.result img {
     margin      :   0 0 15px 0;
 }
 
-.wikirec h2 {
-    font-size   :   1.7em;
-    font-weight : 100;
+.wikirec h1,
+.wikirec h2,
+.wikirec h3 {
+    color      :   rgba(0, 0, 0, 0.6);
+    line-height :   120%;
+}
+
+.wikirec h1 {
+    font-size   :   2em;
     margin      :    10px 0 10px 0;
-    color       :   #666;
+    padding     :   0 0 10px 0;
+    border-bottom   :   1px rgba(0, 0, 0, 0.1) solid;
+}
+
+.wikirec h2 {
+    font-size   :   1.6em;
+    padding     :   0 0 10px 0;
+    margin      :    10px 0 10px 0;
+    border-bottom   :   1px rgba(0, 0, 0, 0.1) solid;
 }
 
 .wikirec h3 {
     font-size   :   1.4em;
-    font-weight : 100;
     margin      :    0 0 10px 0;
-    color       :   #666;
 }
 
 .wikirec ul, .wikirec ol {
@@ -334,20 +392,29 @@ div.result img {
     float       :   left;
 }
 
-.wikirec .thumb {
-    margin      :   10px;
+.wikirec .thumb,
+.wikirec .thumbinner {
+    margin      :   0;
+    width       :   100% !important;
 }
 
 .wikirec .thumb img {
     margin      :   0;
-    padding     :   2px;
-    border      :   1px #e2e2e2 solid;
-    background  :   #efefef;
+    background  :   #0f0f0f;
+    width       :   100%;
+    height      :   auto;
 }
 
 .wikirec .thumbcaption {
-    font-size   :   0.8em;
-    line-height :   100%;
+    font-size   :   0.9em;
+    line-height :   140%;
+    font-family :   "Open Sans Light", sans-serif;
+    font-weight : normal !important;
+    margin      :   0 10px 20px 10px;
+}
+
+.wikirec .magnify {
+    display     :   none;
 }
 
 .wikirec sup {

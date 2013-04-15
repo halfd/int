@@ -13,6 +13,7 @@ $(function() {
     /* Constants */
 
     var fadeMouseInteractiveElementsTime = 2100
+    var fadeMouseInteractiveElementsTimer = null
 
     /* The app*/
     stage = $('#stage')
@@ -95,7 +96,7 @@ $(function() {
         // Fade out the resizers etc after some time
         if (!$('body').hasClass('mousemoving')) {
             $('body').addClass('mousemoving')
-            var tmptimer = window.setTimeout(function() {
+            fadeMouseInteractiveElementsTimer = window.setTimeout(function() {
                 $('body').removeClass('mousemoving')
             }, fadeMouseInteractiveElementsTime, false)
         }
@@ -118,6 +119,18 @@ $(function() {
 
     load()
 })
+
+function setEditMode(state) {
+    if (state) {
+        $('#world').removeClass('locked')
+        $('.ui-draggable').draggable('enable')
+        $('.ui-resizable').resizable('enable')
+    } else {
+        $('#world').addClass('locked')
+        $('.ui-draggable').draggable('disable')
+        $('.ui-resizable').resizable('disable')
+    }
+}
 
 function save() {
     debug("save - " + stageAt)
@@ -145,12 +158,16 @@ function setEditMode(state) {
 function getBoxes() {
     var boxes = []
     $('.box').each(function(i, box) {
+        $(box).data('updatePositionData')()
+
         var boxrep = {
             bid : $(box).data('bid'),
             positionData : $(box).data('positionData'),
+            metaData : $(box).data('metaData'),
             content : $(box).html(),
         }
         boxes.push(boxrep)
+        bbb = box
     })
 
     return boxes
@@ -200,27 +217,42 @@ function box(boxData) {
         var positionData = boxData.positionData
         box.html(boxData.content)
         box.find('.ui-resizable-handle, .menu').remove()
+
+        var metaData = boxData.metaData
     }
 
     if (positionData != undefined) {
         box.data('positionData', positionData)
     } else {
-            box.data('positionData', {
-                x : 0,
-                y : 0,
-                width : 160,
-                height : 160,
-            })
+        box.data('positionData', {
+            x : 0,
+            y : 0,
+            width : 160,
+            height : 160,
+        })
     }
 
-    box.updatePositionData = function() {
+    if (metaData != undefined) {
+        box.data('metaData', metaData)
+    } else {
+        box.data('metaData', {
+            backgroundColor : '#f9f9f9',
+        })
+    }
+
+    box.data('updatePositionData', function() {
         box.data('positionData').x = box.css('left')
         box.data('positionData').y = box.css('top')
         box.data('positionData').width = box.css('width')
         box.data('positionData').height = box.css('height')
 
-        save()
-    }
+        box.data('updateMetaData')()
+    })
+
+    box.data('updateMetaData', function() {
+        box.data('metaData').backgroundColor = box.css('background-color')
+        box.data('metaData').colored = box.hasClass('colored')
+    })
 
     menu.bind('click', function(ev) {
         cmenu(ev)
@@ -231,23 +263,29 @@ function box(boxData) {
     box.append(menu)
 
     box.css('position','absolute')
-    
+
     box.css('top', box.data('positionData').y)
     box.css('left', box.data('positionData').x)
     box.css('width', box.data('positionData').width)
     box.css('height', box.data('positionData').height)
 
+    box.css('background-color', box.data('metaData').backgroundColor)
+
+    if (box.data('metaData').colored) {
+        box.addClass('colored')
+    }
+
     box.draggable(
         {
             grid : [20, 20],
-            stop : function() { box.updatePositionData() },
+            stop : function() { save() },
         }
     )
 
     box.resizable(
         {
             grid : [20, 20],
-            stop : function() { box.updatePositionData() },
+            stop : function() { save() },
         }
     )
 
@@ -255,7 +293,7 @@ function box(boxData) {
 }
 
 function cmenu(ev) {
-    var target = $(ev.target).parent()
+    var target = $(ev.target).parent()[0]
     $('#cmenu').remove()
     var cmenu = $('<div id="cmenu"><ol></ol></div>')
 
@@ -272,13 +310,20 @@ function cmenu(ev) {
     var pa2 = $('<li>Flickr content</li>')
     menu.append(pa2)
     pa2.bind('click', function(ev) {
-        addFlickrImageNode(target)    
+        addFlickrImageNode(target)
+    })
+
+    var pb2 = $('<li>Color node</li>')
+    menu.append(pb2)
+    pb2.bind('click', function(ev) {
+        colorNode(target)
+        save()
     })
 
     var p2 = $('<li>Youtube content</li>')
     menu.append(p2)
     p2.bind('click', function(ev) {
-        addYoutubeNode(target)    
+        addYoutubeNode(target)
     })
 
     var p5 = $('<li>Wiki receiver</li>')
@@ -307,7 +352,7 @@ function cmenu(ev) {
                     $(data.RelatedTopics).each(function(i, element) {
                         var rnode = $('<div class="result"><img /><span></span></div>')
                         rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
-                            
+                            ev.preventDefault()
                             if (/\/c\//.test(ev.target.href)) {
                                 debug('int the this')
                                 node.val(ev.target.innerText)
@@ -315,7 +360,7 @@ function cmenu(ev) {
                             } else {
                                 debug('goint to wikip')
                                 var query = ev.target.innerText
-                                getWiki(query);
+                                getWiki(query)
                             }
                             return false
                         })
@@ -326,7 +371,13 @@ function cmenu(ev) {
 
             })
         }
-        target.append(node)
+        $(target).append(node)
+    })
+
+    var debug = $('<li>Debug log</li>')
+    menu.append(debug)
+    debug.bind('click', function(ev) {
+        $(target).append('<div class="console"></div>')
     })
 
     var debug = $('<li>Debug log</li>')
@@ -369,7 +420,8 @@ function addTextNode(target) {
 }
 
 function addYoutubeNode(target) {
-    var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+    //var node = $('<iframe data-type="node" width="580" height="340" src="http://www.youtube.com/embed/pJTnr0L4ejc" frameborder="0" allowfullscreen></iframe>')
+    var node = $('<iframe width="480" height="360" src="https://www.youtube-nocookie.com/embed/j7dizbMC_2Q" frameborder="0" allowfullscreen></iframe>')
     $(target).append(node)
 }
 
@@ -396,15 +448,41 @@ function addFlickrImageNode(target) {
 
 }
 
+function colorNode(target) {
+    var r = Math.floor(Math.random() * 127) + 64
+    var g = Math.floor(Math.random() * 127) + 64
+    var b = Math.floor(Math.random() * 127) + 64
+
+    var rgbstr = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+
+    $(target).css('background', rgbstr).addClass('colored')
+}
+
 /* Sources */
 
 function getWiki(query) {
-    $.getJSON("http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
-        var wikititle = data.parse.title;
-        var wikitext = data.parse.text['*'];
-        $('.wikirec').html("").append('<div class="wikitext"><h2>' + wikititle + '</h2>' + wikitext + '</div>')
+    $.getJSON("https://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
+        var wikititle = data.parse.title
+        var wikitext = data.parse.text['*']
+        $('.wikirec').html("").append('<div class="wikitext"><h1>' + wikititle + '</h1>' + wikitext + '</div>')
         $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
-        $('.wikitext a').bind('click', function() { getWiki(this.title); return false })
+        $('.wikitext a').bind('click', function(ev) {
+            ev.preventDefault()
+            if (ev.target.attributes.getNamedItem('href').value.indexOf('#') == 0) {
+
+            } else {
+                getWiki(this.title)
+                return false
+            }
+        })
+
+        $('.wikitext > :not(h2,h1)').hide()
+        $('.wikitext p').first().show()
+
+        window.setTimeout(function() {
+            $('.wikitext > h2').bind('click', function(ev) { $(this).next().toggle() })
+        }, 200)
+
         $('.wikirec')[0].scrollByPages(-100)
     })
 }
