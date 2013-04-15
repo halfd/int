@@ -395,7 +395,6 @@ function colorNode(target) {
 /* Sources */
 
 function getWiki(query) {
-    var wikiUrl = ''
     $.getJSON("https://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
         var wikititle = data.parse.title
         var wikitext = data.parse.text['*']
