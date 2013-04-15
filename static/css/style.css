@@ -1,22 +1,31 @@
 @font-face {
     font-family :   'Open Sans';
     src         :   url('../fonts/OpenSans-Regular-webfont.ttf') format('truetype');
+    font-weight :   normal;
+    font-style  :   normal;
+}
+
+@font-face {
+    font-family :   'Open Sans Light';
+    src         :   url('../fonts/OpenSans-Light-webfont.ttf') format('truetype');
+    font-weight :   normal;
+    font-style  :   normal;
 }
 
 body {
     font-family : "Helvetica", sans-serif;
     font-weight : 100;
     color       :   #525250;
-    background-color    :   000;
+    background-color    :   #000;
     background-image : url('../images/space.jpg');
     background-repeat : no-repeat;
     background-size : cover;
 }
 
 a {
-    color : #27b;
+    color : #37a;
     text-decoration : none;
-    border-bottom : 1px #389 dashed;
+    border-bottom : 1px #7ae dashed;
 }
 
 a:visited {
@@ -29,7 +38,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family :   "Open Sans", sans-serif;
+    font-family :   "Open Sans Light", sans-serif;
     font-weight : normal !important;
 }
 
@@ -84,29 +93,30 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow  :   0 0 5px rgba(0,0,0,0.2)
 }
 
-.box .menu {
+.box .menu,
+.box .ui-resizable-se {
     position    :    absolute;
-    top            :    0;
-    left        :    0;
     width        :    40px;
     height        :    40px;
-    background  :   rgba(0,0,0,0.08);
+    background  :   rgba(0,0,0,0.03);
     opacity        :    0;
     -webkit-transition : opacity 0.4s ease-in-out;
     -moz-transition : opacity 0.4s ease-in-out;
 }
 
+.box .menu {
+    top            :    0;
+    left        :    0;
+}
+
 .box .ui-resizable-se {
-    width       :   40px;
-    height      :   40px;
-    background  :   rgba(0,0,0,0.08);
-    position    :   absolute;
     bottom      :   0;
     right       :   0;
-    opacity     :   0;
-    border-radius   :   2px 0 0 0;
-    -webkit-transition : opacity 0.4s ease-in-out;
-    -moz-transition : opacity 0.4s ease-in-out;
+}
+
+.box:hover .menu,
+.box:hover .ui-resizable-se {
+    background  :   rgba(0, 0, 0, 0.06);
 }
 
 .box .textfield {
@@ -230,7 +240,12 @@ div.result img {
 .box.colored .result h3,
 .box.colored .result .source,
 .box.colored {
-    color       :   #ededed;
+    color       :   rgba(245, 245, 245, 0.7);
+}
+
+.box.colored a {
+    color       :   rgba(0, 0, 0, 0.4);
+    border-bottom : 0;
 }
 
 .wikirec {
@@ -253,18 +268,30 @@ div.result img {
     margin      :   0 0 15px 0;
 }
 
-.wikirec h2 {
-    font-size   :   1.7em;
-    font-weight : 100;
+.wikirec h1,
+.wikirec h2,
+.wikirec h3 {
+    color      :   rgba(0, 0, 0, 0.6);
+    line-height :   120%;
+}
+
+.wikirec h1 {
+    font-size   :   2em;
     margin      :    10px 0 10px 0;
-    color      :   rgba(0, 0, 0, 0.5);
+    padding     :   0 0 10px 0;
+    border-bottom   :   1px rgba(0, 0, 0, 0.1) solid;
+}
+
+.wikirec h2 {
+    font-size   :   1.6em;
+    padding     :   0 0 10px 0;
+    margin      :    10px 0 10px 0;
+    border-bottom   :   1px rgba(0, 0, 0, 0.1) solid;
 }
 
 .wikirec h3 {
     font-size   :   1.4em;
-    font-weight : 100;
     margin      :    0 0 10px 0;
-    color      :   rgba(0, 0, 0, 0.8);
 }
 
 .wikirec ul, .wikirec ol {
@@ -292,20 +319,29 @@ div.result img {
     float       :   left;
 }
 
-.wikirec .thumb {
-    margin      :   10px;
+.wikirec .thumb,
+.wikirec .thumbinner {
+    margin      :   0;
+    width       :   100% !important;
 }
 
 .wikirec .thumb img {
     margin      :   0;
-    padding     :   2px;
-    border      :   1px #e2e2e2 solid;
-    background  :   #efefef;
+    background  :   #0f0f0f;
+    width       :   100%;
+    height      :   auto;
 }
 
 .wikirec .thumbcaption {
-    font-size   :   0.8em;
-    line-height :   100%;
+    font-size   :   0.9em;
+    line-height :   140%;
+    font-family :   "Open Sans Light", sans-serif;
+    font-weight : normal !important;
+    margin      :   0 10px 20px 10px;
+}
+
+.wikirec .magnify {
+    display     :   none;
 }
 
 .wikirec sup {

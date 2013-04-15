@@ -6,10 +6,12 @@ var debug = function(str) {
     $('.console').append($('<div>' + str + '</div>')).bind('click', function(ev) { $(this).find('div').remove() })
     console.log(str)
 }
+
 $(function() {
     /* Constants */
 
     var fadeMouseInteractiveElementsTime = 2100
+    var fadeMouseInteractiveElementsTimer = null
 
     /* The app*/
     stage = $('#stage')
@@ -54,7 +56,7 @@ $(function() {
         // Fade out the resizers etc after some time
         if (!$('body').hasClass('mousemoving')) {
             $('body').addClass('mousemoving')
-            var tmptimer = window.setTimeout(function() {
+            fadeMouseInteractiveElementsTimer = window.setTimeout(function() {
                 $('body').removeClass('mousemoving')
             }, fadeMouseInteractiveElementsTime, false)
         }
@@ -92,9 +94,13 @@ function load() {
     setBoxes(JSON.parse(localStorage.getItem('boxes_' + stageAt)))
 }
 
+bbb = null
+
 function getBoxes() {
     var boxes = []
     $('.box').each(function(i, box) {
+        $(box).data('updatePositionData')()
+
         var boxrep = {
             bid : $(box).data('bid'),
             positionData : $(box).data('positionData'),
@@ -102,6 +108,7 @@ function getBoxes() {
             content : $(box).html(),
         }
         boxes.push(boxrep)
+        bbb = box
     })
 
     return boxes
@@ -174,22 +181,19 @@ function box(boxData) {
         })
     }
 
-    box.updatePositionData = function() {
+    box.data('updatePositionData', function() {
         box.data('positionData').x = box.css('left')
         box.data('positionData').y = box.css('top')
         box.data('positionData').width = box.css('width')
         box.data('positionData').height = box.css('height')
 
-        box.updateMetaData()
+        box.data('updateMetaData')()
+    })
 
-        save()
-    }
-
-    box.updateMetaData = function() {
+    box.data('updateMetaData', function() {
         box.data('metaData').backgroundColor = box.css('background-color')
         box.data('metaData').colored = box.hasClass('colored')
-        save()
-    }
+    })
 
     menu.bind('click', function(ev) {
         cmenu(ev)
@@ -215,14 +219,14 @@ function box(boxData) {
     box.draggable(
         {
             grid : [20, 20],
-            stop : function() { box.updatePositionData() },
+            stop : function() { save() },
         }
     )
 
     box.resizable(
         {
             grid : [20, 20],
-            stop : function() { box.updatePositionData() },
+            stop : function() { save() },
         }
     )
 
@@ -254,6 +258,7 @@ function cmenu(ev) {
     menu.append(pb2)
     pb2.bind('click', function(ev) {
         colorNode(target)
+        save()
     })
 
     var p2 = $('<li>Youtube content</li>')
@@ -390,19 +395,29 @@ function colorNode(target) {
 /* Sources */
 
 function getWiki(query) {
-    $.getJSON("http://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
+    var wikiUrl = ''
+    $.getJSON("https://en.wikipedia.org/w/api.php?action=parse&format=json&callback=?", {page:query, prop:"text"}, function(data) {
         var wikititle = data.parse.title
         var wikitext = data.parse.text['*']
-        $('.wikirec').html("").append('<div class="wikitext"><h2>' + wikititle + '</h2>' + wikitext + '</div>')
+        $('.wikirec').html("").append('<div class="wikitext"><h1>' + wikititle + '</h1>' + wikitext + '</div>')
         $('.wikitext').find('img').each(function(i, e) { e.src = e.src.replace('file','https')  })
-        $('.wikitext a').bind('click', function() {
+        $('.wikitext a').bind('click', function(ev) {
+            ev.preventDefault()
             if (ev.target.attributes.getNamedItem('href').value.indexOf('#') == 0) {
 
             } else {
-                getWiki(this.title);
+                getWiki(this.title)
                 return false
             }
         })
+
+        $('.wikitext > :not(h2,h1)').hide()
+        $('.wikitext p').first().show()
+
+        window.setTimeout(function() {
+            $('.wikitext > h2').bind('click', function(ev) { $(this).next().toggle() })
+        }, 200)
+
         $('.wikirec')[0].scrollByPages(-100)
     })
 }
