@@ -53,7 +53,7 @@ $(function() {
         //return false
     })
 
-    $(stage).bind('click', function(ev) {
+    $(stage).bind('dblclick', function(ev) {
         if (world.hasClass('zoom')) {
             world.removeClass('zoom')
             return
@@ -354,11 +354,10 @@ function cmenu(ev) {
                         rnode.find('span').html(element.Result).find('a').bind('click', function(ev) {
                             ev.preventDefault()
                             if (/\/c\//.test(ev.target.href)) {
-                                debug('int the this')
+                                //debug('int the this')
                                 node.val(ev.target.innerText)
                                 node.callback()
                             } else {
-                                debug('goint to wikip')
                                 var query = ev.target.innerText
                                 getWiki(query)
                             }

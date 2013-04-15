@@ -15,7 +15,7 @@
 body {
     font-family : "Helvetica", sans-serif;
     font-weight : 100;
-    font-size   :   0.8em;
+    font-size   :   1em;
     color       :   #525250;
     background-color    :   #000;
     background-image : url('../images/space.jpg');
@@ -162,8 +162,6 @@ h1, h2, h3, h4, h5, h6 {
 .box .menu,
 .box .ui-resizable-se {
     position    :    absolute;
-    top            :    0;
-    left        :    0;
     width        :    40px;
     height        :    40px;
     background  :   rgba(0,0,0,0.04);
@@ -346,6 +344,7 @@ div.result img {
 .wikirec h3 {
     color      :   rgba(0, 0, 0, 0.6);
     line-height :   120%;
+    cursor      :   pointer;
 }
 
 .wikirec h1 {
