@@ -5,6 +5,10 @@ Int - interface for interfacing with each other.
 
 At the "Release early" stage.
 
+*Live demo*
+
+Head over to https://halfd.github.io/int/ to see where this is heading.
+
 
 *Manual*
 
