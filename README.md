@@ -7,7 +7,7 @@ At the "Release early" stage.
 
 *Live demo*
 
-Head over to https://halfd.github.io/int/ to see where this is heading.
+Head over to http://halfd.github.io/int/ to see where this is heading.
 
 
 *Manual*
