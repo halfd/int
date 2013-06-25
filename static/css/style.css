@@ -38,6 +38,10 @@ a:hover {
     border-bottom-style : solid;
 }
 
+sub, sup {
+    line-height :   0;
+}
+
 #globalmenu {
     position    :   absolute;
     top         :   -100%;
@@ -153,6 +157,10 @@ h1, h2, h3, h4, h5, h6 {
     -moz-transition : -moz-transform 0.8s ease-out;
     color : #666;
     overflow        :   hidden;
+}
+
+.box.narrowview {
+    font-size   :   0.8em;
 }
 
 .box.ui-draggable-dragging {
@@ -420,4 +428,5 @@ div.result img {
     vertical-align : super;
     font-size : 0.6em;
     margin-left : 3px;
+    line-height     :   0;
 }

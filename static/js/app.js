@@ -271,6 +271,14 @@ function box(boxData) {
 
     box.css('background-color', box.data('metaData').backgroundColor)
 
+    box.checksize = function() {
+        if ($(box).width() < 300) {
+            $(box).addClass('narrowview')
+        } else {
+            $(box).removeClass('narrowview')
+        }
+    }
+
     if (box.data('metaData').colored) {
         box.addClass('colored')
     }
@@ -285,7 +293,8 @@ function box(boxData) {
     box.resizable(
         {
             grid : [20, 20],
-            stop : function() { save() },
+            resize : box.checksize,
+            stop : function() { box.checksize(); save() },
         }
     )
 
