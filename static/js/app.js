@@ -53,7 +53,7 @@ $(function() {
         //return false
     })
 
-    $(stage).bind('dblclick', function(ev) {
+    $(stage).bind('click', function(ev) {
         if (world.hasClass('zoom')) {
             world.removeClass('zoom')
             return
